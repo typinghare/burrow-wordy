@@ -2,6 +2,7 @@ package burrow.furniture.wordy;
 
 import burrow.core.chamber.Chamber;
 import burrow.core.common.Values;
+import burrow.core.config.Config;
 import burrow.core.furniture.BurrowFurniture;
 import burrow.core.furniture.Furniture;
 import burrow.furniture.hoard.Entry;
@@ -32,8 +33,15 @@ public class WordyFurniture extends Furniture {
     }
 
     @Override
+    public void initializeConfig(@NonNull final Config config) {
+        config.set(PairFurniture.ConfigKey.PAIR_KEY_NAME, EntryKey.WORD);
+        config.set(PairFurniture.ConfigKey.PAIR_VALUE_NAME, EntryKey.TRANSLATION);
+    }
+
+    @Override
     public void beforeInitialization() {
         registerCommand(NewCommand.class);
+        registerCommand(WordCommand.class);
         registerCommand(NextCommand.class);
         registerCommand(ArchiveCommand.class);
         registerCommand(ArchiveLastCommand.class);
