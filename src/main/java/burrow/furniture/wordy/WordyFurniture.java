@@ -55,7 +55,7 @@ public class WordyFurniture extends Furniture {
         }
 
         final var allEntries =
-            hoard.getAllEntries().stream().filter(entry -> entry.isFalse(EntryKey.IS_ARCHIVED))
+            hoard.getEntryList().stream().filter(entry -> entry.isFalse(EntryKey.IS_ARCHIVED))
                 .toList();
         final var id = random.nextInt(allEntries.size());
         final var wordEntry = allEntries.get(id);

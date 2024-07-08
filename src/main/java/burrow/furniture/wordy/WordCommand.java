@@ -40,16 +40,16 @@ public class WordCommand extends Command {
         final var timeFurniture = use(TimeFurniture.class);
         final var word = pairFurniture.getKey(wordEntry);
         final var translation = pairFurniture.getValue(wordEntry);
-        final var example = wordEntry.get(WordyFurniture.EntryKey.EXAMPLE);
-        final var reviews = wordEntry.get(WordyFurniture.EntryKey.REVIEWS);
-        final var createdAt = wordEntry.get(TimeFurniture.EntryKey.CREATED_AT);
-        final var updatedAt = wordEntry.get(TimeFurniture.EntryKey.UPDATED_AT);
+        final var example = wordEntry.getNonNull(WordyFurniture.EntryKey.EXAMPLE);
+        final var reviews = wordEntry.getNonNull(WordyFurniture.EntryKey.REVIEWS);
+        final var createdAt = wordEntry.getNonNull(TimeFurniture.EntryKey.CREATED_AT);
+        final var updatedAt = wordEntry.getNonNull(TimeFurniture.EntryKey.UPDATED_AT);
         final var extraInfo = "reviews: " + reviews
             + " | included at: "
             + timeFurniture.dateToString(Long.parseLong(createdAt))
             + " | reviewed at: "
             + timeFurniture.dateToString(Long.parseLong(updatedAt));
-        final var environment = CommandContext.Hook.environment.getNonNull(commandContext);
+        final var environment = commandContext.getEnvironment();
 
         buffer.append(ColorUtility.render(word, "green,bold"));
         buffer.append("  ");
