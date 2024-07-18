@@ -8,7 +8,7 @@ import burrow.furniture.hoard.Entry;
 import burrow.furniture.hoard.HoardFurniture;
 import burrow.furniture.pair.PairFurniture;
 import burrow.furniture.time.TimeFurniture;
-import org.springframework.lang.NonNull;
+import org.jetbrains.annotations.NotNull;
 import picocli.CommandLine;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class WordCommand extends Command {
     @CommandLine.Parameters(index = "0", description = "The id of the word entry to display.")
     private Integer id;
 
-    public WordCommand(@NonNull final CommandContext commandContext) {
+    public WordCommand(@NotNull final CommandContext commandContext) {
         super(commandContext);
     }
 
@@ -35,15 +35,15 @@ public class WordCommand extends Command {
         return CommandLine.ExitCode.OK;
     }
 
-    public void displayWord(@NonNull final Entry wordEntry) {
+    public void displayWord(@NotNull final Entry wordEntry) {
         final var pairFurniture = use(PairFurniture.class);
         final var timeFurniture = use(TimeFurniture.class);
         final var word = pairFurniture.getKey(wordEntry);
         final var translation = pairFurniture.getValue(wordEntry);
-        final var example = wordEntry.getNonNull(WordyFurniture.EntryKey.EXAMPLE);
-        final var reviews = wordEntry.getNonNull(WordyFurniture.EntryKey.REVIEWS);
-        final var createdAt = wordEntry.getNonNull(TimeFurniture.EntryKey.CREATED_AT);
-        final var updatedAt = wordEntry.getNonNull(TimeFurniture.EntryKey.UPDATED_AT);
+        final var example = wordEntry.getNotNull(WordyFurniture.EntryKey.EXAMPLE);
+        final var reviews = wordEntry.getNotNull(WordyFurniture.EntryKey.REVIEWS);
+        final var createdAt = wordEntry.getNotNull(TimeFurniture.EntryKey.CREATED_AT);
+        final var updatedAt = wordEntry.getNotNull(TimeFurniture.EntryKey.UPDATED_AT);
         final var extraInfo = "reviews: " + reviews
             + " | included at: "
             + timeFurniture.dateToString(Long.parseLong(createdAt))
@@ -51,19 +51,16 @@ public class WordCommand extends Command {
             + timeFurniture.dateToString(Long.parseLong(updatedAt));
         final var environment = commandContext.getEnvironment();
 
-        buffer.append(ColorUtility.render(word, "green,bold"));
-        buffer.append("  ");
-        buffer.append(ColorUtility.render(translation, "green,bold"));
-        buffer.append("\n");
-        buffer.append(getExampleLine(example, environment.getConsoleWidth()));
-        buffer.append("\n");
+        buffer.append(getColoredWord(word)).append("  ");
+        buffer.append(getColoredTranslation(translation)).append("\n");
+        buffer.append(getExampleLine(example, environment.getConsoleWidth())).append("\n");
         buffer.append(ColorUtility.render(extraInfo, "fg(247)"));
     }
 
-    @NonNull
+    @NotNull
     public String getExampleLine(
-        @NonNull final String example,
-        @NonNull final Integer consoleWidth
+        @NotNull final String example,
+        @NotNull final Integer consoleWidth
     ) {
         if (consoleWidth < 20) {
             return ColorUtility.render(example, "fg(222)");
@@ -93,5 +90,13 @@ public class WordCommand extends Command {
         }
 
         return ColorUtility.render(String.join("\n", lines), "fg(222)");
+    }
+
+    public static @NotNull String getColoredWord(@NotNull final String word) {
+        return ColorUtility.render(word, "green,bold");
+    }
+
+    public static @NotNull String getColoredTranslation(@NotNull final String translation) {
+        return ColorUtility.render(translation, "cyan,bold");
     }
 }

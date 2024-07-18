@@ -9,7 +9,7 @@ import burrow.furniture.hoard.Entry;
 import burrow.furniture.hoard.HoardFurniture;
 import burrow.furniture.pair.PairFurniture;
 import burrow.furniture.time.TimeFurniture;
-import org.springframework.lang.NonNull;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.lang.Nullable;
 
 import java.util.Random;
@@ -17,6 +17,7 @@ import java.util.Random;
 @BurrowFurniture(
     simpleName = "Wordy",
     description = "Learn and review vocabulary with Wordy!",
+    type = BurrowFurniture.Type.MAIN,
     dependencies = {
         PairFurniture.class,
         TimeFurniture.class
@@ -28,12 +29,12 @@ public class WordyFurniture extends Furniture {
     private final Random random = new Random();
     private int lastWordId = 0;
 
-    public WordyFurniture(@NonNull final Chamber chamber) {
+    public WordyFurniture(@NotNull final Chamber chamber) {
         super(chamber);
     }
 
     @Override
-    public void initializeConfig(@NonNull final Config config) {
+    public void initializeConfig(@NotNull final Config config) {
         config.set(PairFurniture.ConfigKey.PAIR_KEY_NAME, EntryKey.WORD);
         config.set(PairFurniture.ConfigKey.PAIR_VALUE_NAME, EntryKey.TRANSLATION);
     }
@@ -45,6 +46,7 @@ public class WordyFurniture extends Furniture {
         registerCommand(NextCommand.class);
         registerCommand(ArchiveCommand.class);
         registerCommand(ArchiveLastCommand.class);
+        registerCommand(ListCommand.class);
     }
 
     @Nullable
@@ -74,10 +76,10 @@ public class WordyFurniture extends Furniture {
         return lastWordId;
     }
 
-    @NonNull
+    @NotNull
     public Entry createWordEntry(
-        @NonNull final String word,
-        @NonNull final String translation
+        @NotNull final String word,
+        @NotNull final String translation
     ) {
         final var pairFurniture = use(PairFurniture.class);
         final var entry = pairFurniture.createEntryWithKeyValue(word, translation);
@@ -88,11 +90,11 @@ public class WordyFurniture extends Furniture {
         return entry;
     }
 
-    public void setExample(@NonNull final Entry entry, @NonNull final String example) {
+    public void setExample(@NotNull final Entry entry, @NotNull final String example) {
         entry.set(EntryKey.EXAMPLE, example);
     }
 
-    public void archive(@NonNull final Entry entry) {
+    public void archive(@NotNull final Entry entry) {
         entry.set(EntryKey.IS_ARCHIVED, Values.Bool.TRUE);
         use(TimeFurniture.class).setUpdateTime(entry);
     }

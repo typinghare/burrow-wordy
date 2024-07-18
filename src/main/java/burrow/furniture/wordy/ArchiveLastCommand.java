@@ -3,13 +3,13 @@ package burrow.furniture.wordy;
 import burrow.core.command.Command;
 import burrow.core.command.CommandContext;
 import burrow.core.command.CommandType;
-import org.springframework.lang.NonNull;
+import org.jetbrains.annotations.NotNull;
 import picocli.CommandLine;
 
 @CommandLine.Command(name = "archive-last", description = "Display a random word.")
 @CommandType(WordyFurniture.COMMAND_TYPE)
 public class ArchiveLastCommand extends Command {
-    public ArchiveLastCommand(@NonNull final CommandContext commandContext) {
+    public ArchiveLastCommand(@NotNull final CommandContext commandContext) {
         super(commandContext);
     }
 
